@@ -1,0 +1,6 @@
+@DestinopacificoExpres_HostAddress = http://localhost:5248
+
+GET {{DestinopacificoExpres_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
