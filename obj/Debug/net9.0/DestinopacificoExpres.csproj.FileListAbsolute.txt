@@ -156,3 +156,4 @@ D:\DestinopacificoExpres\obj\Debug\net9.0\refint\DestinopacificoExpres.dll
 D:\DestinopacificoExpres\obj\Debug\net9.0\DestinopacificoExpres.pdb
 D:\DestinopacificoExpres\obj\Debug\net9.0\DestinopacificoExpres.genruntimeconfig.cache
 D:\DestinopacificoExpres\obj\Debug\net9.0\ref\DestinopacificoExpres.dll
+D:\DestinopacificoExpres\obj\Debug\net9.0\DestinopacificoExpres.sourcelink.json

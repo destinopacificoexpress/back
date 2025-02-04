@@ -37,6 +37,85 @@ namespace DestinopacificoExpres.Controllers
             return Ok(new { mensaje = "Horario creado correctamente" });
         }
 
+        [HttpGet("horarios/{LugarPartidaId}")]
+        public async Task<IActionResult> GetHorariosLugarPartidaId(int LugarPartidaId)
+        {
+            var hoy = DateTime.Today; 
+            var horarios = await _context.Viajes
+                .Where(h =>h.LugarPartidaId == LugarPartidaId && h.FechaViaje >= hoy)
+                .Select(h => new
+                {
+                    h.ViajeId,
+                    h.FechaViaje,
+                    h.LugarPartidaId,
+                    h.HoraSalida,
+                    h.HoraRetorno,
+                    Destino = h.DestinoId
+                }).ToListAsync();
+
+            return Ok(horarios);
+        }
+
+         [HttpGet("horarios")]
+        public async Task<IActionResult> GetHorarios()
+        {
+            var hoy = DateTime.Today; 
+            var horarios = await _context.Viajes
+                .Where(h =>h.FechaViaje >= hoy)
+                .Select(h => new
+                {
+                    h.ViajeId,
+                    h.FechaViaje,
+                    h.LugarPartidaId,
+                    h.HoraSalida,
+                    h.HoraRetorno,
+                    Destino = h.DestinoId
+                }).ToListAsync();
+
+            return Ok(horarios);
+        }
+
+
+        [HttpGet("horarios-lancha-hoy")]
+        public async Task<IActionResult> GetHorariosHoy()
+        {
+            var hoy = DateTime.Today; 
+            var horarios = await _context.Viajes
+                .Where(h => h.LanchaId != null && h.FechaViaje == hoy)
+                .Select(h => new
+                {
+                    h.ViajeId,
+                    h.FechaViaje,
+                    h.LugarPartidaId,
+                    h.HoraSalida,
+                    h.HoraRetorno,
+                    Destino = h.DestinoId
+                }).ToListAsync();
+
+            return Ok(horarios);
+        }
+
+
+        [HttpGet("horarios-lancha")]
+        public async Task<IActionResult> GetHorariosLanchas()
+        {
+
+            var hoy = DateTime.Today; 
+            var horarios = await _context.Viajes
+                .Where(h => h.LanchaId != null && h.FechaViaje >= hoy)
+                .Select(h => new
+                {
+                    h.ViajeId,
+                    h.FechaViaje,
+                    h.LugarPartidaId,
+                    h.HoraSalida,
+                    h.HoraRetorno,
+                    Destino = h.DestinoId
+                }).ToListAsync();
+
+            return Ok(horarios);
+        }
+
 
         [HttpGet("horarios-sin-lancha")]
         public async Task<IActionResult> GetHorariosSinLancha()

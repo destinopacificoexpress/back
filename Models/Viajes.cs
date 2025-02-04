@@ -11,3 +11,4 @@ public class Viaje
     
     public required string Estado { get; set; } // -- Activo, Cancelado, Finalizado
 }
+
