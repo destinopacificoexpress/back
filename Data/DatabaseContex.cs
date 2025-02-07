@@ -30,9 +30,6 @@ namespace DestinopacificoExpres.Data
 
         public DbSet<HorarioDisponible> HorarioDisponibles { get; set; }
 
-
-
-
         public DbSet<TipoDocumento> TipoDocumento { get; set; }
 
 

@@ -5,6 +5,7 @@ D:\DestinopacificoExpres\obj\Debug\net9.0\DestinopacificoExpres.AssemblyInfo.cs
 D:\DestinopacificoExpres\obj\Debug\net9.0\DestinopacificoExpres.csproj.CoreCompileInputs.cache
 D:\DestinopacificoExpres\obj\Debug\net9.0\DestinopacificoExpres.MvcApplicationPartsAssemblyInfo.cs
 D:\DestinopacificoExpres\obj\Debug\net9.0\DestinopacificoExpres.MvcApplicationPartsAssemblyInfo.cache
+D:\DestinopacificoExpres\obj\Debug\net9.0\DestinopacificoExpres.sourcelink.json
 D:\DestinopacificoExpres\bin\Debug\net9.0\appsettings.Development.json
 D:\DestinopacificoExpres\bin\Debug\net9.0\appsettings.json
 D:\DestinopacificoExpres\bin\Debug\net9.0\DestinopacificoExpres.staticwebassets.endpoints.json
@@ -156,4 +157,3 @@ D:\DestinopacificoExpres\obj\Debug\net9.0\refint\DestinopacificoExpres.dll
 D:\DestinopacificoExpres\obj\Debug\net9.0\DestinopacificoExpres.pdb
 D:\DestinopacificoExpres\obj\Debug\net9.0\DestinopacificoExpres.genruntimeconfig.cache
 D:\DestinopacificoExpres\obj\Debug\net9.0\ref\DestinopacificoExpres.dll
-D:\DestinopacificoExpres\obj\Debug\net9.0\DestinopacificoExpres.sourcelink.json

@@ -113,9 +113,14 @@ public class Tiquete
 
     // Otros campos
     [Required]
+
     public DateTime FechaAbordo { get; set; }
 
+    [Required]
+    public string HoraAbordo{ get; set; }
     public DateTime? FechaRetorno { get; set; }
+
+    public string? HoraRetorno{ get; set; }
 
     [Required]
     public bool SoloIda { get; set; }
@@ -142,4 +147,8 @@ public class Tiquete
     [Required]
     public int PasajeroId { get; set; }
     public Pasajero? Pasajeros { get; set; } // Propiedad de navegación opcional
+
+    [Required]
+    public int ViajeId { get; set; }
+    public Viaje Viajes { get; set; }
 }

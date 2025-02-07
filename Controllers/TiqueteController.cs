@@ -50,7 +50,9 @@ namespace DestinopacificoExpres.Controllers
                     GrupoId = tiqueteDto.GrupoId,
                     InfoDestinoId = tiqueteDto.DestinoId,
                     FechaAbordo = tiqueteDto.FechaAbordo,
+                    HoraAbordo = tiqueteDto.HoraAbordo,
                     FechaRetorno = tiqueteDto.FechaRetorno,
+                    HoraRetorno = tiqueteDto.HoraRetorno,
                     SoloIda = tiqueteDto.SoloIda,
                     CantidadPasajeros = tiqueteDto.CantidadPasajeros,
                     ValorSugerido = tiqueteDto.ValorSugerido,
@@ -59,7 +61,8 @@ namespace DestinopacificoExpres.Controllers
                     TotalVenta = tiqueteDto.TotalVenta,
                     Descripcion = tiqueteDto.Descripcion,
                     FormaPagoId = tiqueteDto.FormaPagoId,
-                    PasajeroId = tiqueteDto.PasajeroId
+                    PasajeroId = tiqueteDto.PasajeroId,
+                    ViajeId = tiqueteDto.ViajeId
                 };
                 _context.Tiquetes.Add(tiquete);
                 _context.SaveChanges();
@@ -100,7 +103,9 @@ namespace DestinopacificoExpres.Controllers
                     GrupoId = T.GrupoId,
                     InfoDestinoId = T.InfoDestinoId,
                     FechaAbordo = T.FechaAbordo,
+                    HoraAbordo = T.HoraAbordo,
                     FechaRetorno = T.FechaRetorno,
+                    HoraRetorno = T.HoraRetorno,
                     SoloIda = T.SoloIda,
                     CantidadPasajeros = T.CantidadPasajeros,
                     ValorSugerido = T.ValorSugerido,
@@ -109,7 +114,8 @@ namespace DestinopacificoExpres.Controllers
                     TotalVenta = T.TotalVenta,
                     Descripcion = T.Descripcion,
                     FormaPagoId = T.FormaPagoId,
-                    PasajeroId = T.PasajeroId
+                    PasajeroId = T.PasajeroId,
+                    ViajeId = T.ViajeId
                 })
                 .ToList();
             return Ok(tiquetes);
@@ -196,7 +202,10 @@ public class TiqueteRequest
     public int GrupoId { get; set; }
     public int DestinoId { get; set; }
     public DateTime FechaAbordo { get; set; }
+    public string HoraAbordo{ get; set; }
     public DateTime? FechaRetorno { get; set; }
+    
+    public string HoraRetorno{ get; set; }
     public bool SoloIda { get; set; }
     public int CantidadPasajeros { get; set; }
     public decimal ValorSugerido { get; set; }
@@ -206,4 +215,6 @@ public class TiqueteRequest
     public string? Descripcion { get; set; }
     public int FormaPagoId { get; set; }
     public int PasajeroId { get; set; } // Asegúrate de incluir el PasajeroId si es necesario
+    public int ViajeId { get; set; }
+    
 }
