@@ -1,0 +1,49 @@
+
+Tiq. Turista con Impto
+Tiq. Nativo
+Tiq. Expresos
+Tiq. Internos
+Tiq. Paseos
+Tiq. Turista sin Impto
+Tquilla 3os
+Tiq. carga
+Tiq. Cortecia
+Tiq. < 4 años - Cortesia
+Tiq. < 1 años - Cortesia (No suma)
+
+
+
+Juanchaco
+Bocana - Mgpi
+Docordo
+Hotel
+expresos
+
+
+AUNAP/BT ID
+BT/AUNAP ID
+BT/AUNAP RD
+BT/CHUCH ID
+BT/CHUCH RD
+BT/DESPENSA ID
+BT/ISL-PALMA RD
+BT/ISL-PALMA ID
+BT/J DE DIOS ID
+BT/J DE DIOS RD
+BT/JCH ID
+BT/JCH RD
+BT/MALAGA ID
+BT/MALAGA RD
+BT/PTOBREA ID
+BT/PTOBREA RD
+CHUCH/BT ID
+COMBO JCH - NATIVO RD
+DESPENSA/BT ID
+ISL PALM/BT ID
+JCH - MALAGA - JCH ID
+JCH - AUNAP / JCH ID
+JCH/BT ID
+MALAGA/BT ID
+NATIVO - JCH/BT
+NATIVO BT / JCH
+PTOBREA/BT ID

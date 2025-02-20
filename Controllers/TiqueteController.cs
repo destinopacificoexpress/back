@@ -32,7 +32,7 @@ namespace DestinopacificoExpres.Controllers
                     return BadRequest("AgenciaId no existe.");
                 if (!await _context.Grupos.AnyAsync(g => g.GrupoId == tiqueteDto.GrupoId))
                     return BadRequest("GrupoId no existe.");
-                if (!await _context.InfoDestino.AnyAsync(d => d.Id == tiqueteDto.DestinoId))
+                if (!await _context.Destinos.AnyAsync(d => d.DestinoId == tiqueteDto.InfoDestinoId))
                     return BadRequest("DestinoId no existe.");
                 if (!await _context.FormasPago.AnyAsync(f => f.Id == tiqueteDto.FormaPagoId))
                     return BadRequest("FormaPagoId no existe.");
@@ -48,7 +48,7 @@ namespace DestinopacificoExpres.Controllers
                     TipoTiqueteId = tiqueteDto.TipoTiqueteId,
                     AgenciaId = tiqueteDto.AgenciaId,
                     GrupoId = tiqueteDto.GrupoId,
-                    InfoDestinoId = tiqueteDto.DestinoId,
+                    InfoDestinoId = tiqueteDto.InfoDestinoId,
                     FechaAbordo = tiqueteDto.FechaAbordo,
                     HoraAbordo = tiqueteDto.HoraAbordo,
                     FechaRetorno = tiqueteDto.FechaRetorno,
@@ -200,7 +200,7 @@ public class TiqueteRequest
     public int TipoTiqueteId { get; set; }
     public int AgenciaId { get; set; }
     public int GrupoId { get; set; }
-    public int DestinoId { get; set; }
+    public int InfoDestinoId { get; set; }
     public DateTime FechaAbordo { get; set; }
     public string HoraAbordo{ get; set; }
     public DateTime? FechaRetorno { get; set; }

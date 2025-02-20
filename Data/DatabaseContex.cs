@@ -22,6 +22,7 @@ namespace DestinopacificoExpres.Data
         public DbSet<TipoTiquete> TipoTiquete { get; set; }
         public DbSet<Agencias> Agencias { get; set; }
         public DbSet<Grupos> Grupos { get; set; }
+        public DbSet<Destino> Destinos { get; set; }
         public DbSet<InfoDestino> InfoDestino { get; set; }
         public DbSet<FormaPago> FormasPago { get; set; }
 

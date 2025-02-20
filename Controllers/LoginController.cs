@@ -21,115 +21,90 @@ namespace DestinopacificoExpres.Controllers
             _tokenService = tokenService;
         }
 
-
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest usuario)
         {
-            var user = _context.Usuarios.SingleOrDefault(u => u.Email == usuario.Email);
+
+            var user = _context.Usuarios.SingleOrDefault(u => u.Username == usuario.Username);
 
             if (user == null)
             {
-                user = _context.Usuarios.SingleOrDefault(u => u.Username == usuario.Username);
-                if (user == null || !BCrypt.Net.BCrypt.Verify(usuario.Password, user.Password))
-                {
-                    return Unauthorized("usaurio y contraseña incorrectos.");
-                }
-                var tokenService = _config["JwtSettings:SecretKey"];
-                if (tokenService != null)
-                {
-                    string secretKey = tokenService; // Cambiar por una clave más segura y mantenerla en un lugar seguro
-                    var token = _tokenService.GenerateToken(usuario.Username, secretKey);
+                user = _context.Usuarios.SingleOrDefault(u => u.Email == usuario.Email);
+            }
 
-                    var sesion = new Sesion
-                    {
-                        UsuarioId = user.Id,
-                        Token = token,
-                        FechaInicio = DateTime.Now,
-                        FechaExpiracion = DateTime.Now.AddHours(1), // Define el tiempo de expiración que desees
-                        Activa = true
-                    };
+            if (user == null || !BCrypt.Net.BCrypt.Verify(usuario.Password, user.Password))
+            {
+                return Unauthorized("Usuario y/o contraseña incorrectos." + user);
+            }
 
-                    _context.Sesiones.Add(sesion);
-                    _context.SaveChanges();
-                    return Ok(new { Sesion = sesion });
-                }
-                else
+            var tokenService = _config["JwtSettings:SecretKey"];
+            if (tokenService != null)
+            {
+                string secretKey = tokenService; // Cambiar por una clave más segura y mantenerla en un lugar seguro
+                var token = _tokenService.GenerateToken(user.Username, secretKey);
+
+                var Session = new Sesion
                 {
-                    return Unauthorized("Verificar SecretKey");
-                }
+                    UsuarioId = user.Id,
+                    Token = token,
+                    FechaInicio = DateTime.Now,
+                    FechaExpiracion = DateTime.Now.AddHours(2), // Define el tiempo de expiración que desees
+                    Activa = true
+                };
+
+                _context.Sesiones.Add(Session);
+                _context.SaveChanges();
+                return Ok(new { Session = Session });
             }
             else
             {
-                if (user == null || !BCrypt.Net.BCrypt.Verify(usuario.Password, user.Password))
-                {
-                    return Unauthorized("usaurio y contraseña incorrectos.");
-                }
-                var tokenService = _config["JwtSettings:SecretKey"];
-                if (tokenService != null)
-                {
-                    string secretKey = tokenService; // Cambiar por una clave más segura y mantenerla en un lugar seguro
-                    var token = _tokenService.GenerateToken(usuario.Email, secretKey);
-                    var sesion = new Sesion
-                    {
-                        UsuarioId = user.Id,
-                        Token = token,
-                        FechaInicio = DateTime.Now,
-                        FechaExpiracion = DateTime.Now.AddHours(1), // Define el tiempo de expiración que desees
-                        Activa = true
-                    };
-
-                    _context.Sesiones.Add(sesion);
-                    _context.SaveChanges();
-                    return Ok(new { Sesion = sesion });
-                }
-                else
-                {
-                    return Unauthorized("Verificar SecretKey");
-                }
+                return Unauthorized("Verificar SecretKey");
             }
-            // return Ok("Login exitoso.");
         }
 
         [HttpPost("register")]
         public IActionResult Register([FromBody] RegistroRequest usuario)
         {
-
-            // _context.Usuarios.Any(u => u.Email == usuario.Email)
-            var user = _context.Usuarios.SingleOrDefault(u => u.Email == usuario.Email);
+            // Verificar si el modelo es válido
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
             // Verificar si el email ya está registrado
+            var user = _context.Usuarios.SingleOrDefault(u => u.Email == usuario.Email);
             if (user != null)
             {
                 return BadRequest("El email ya está registrado.");
             }
 
+            // Verificar si el nombre de usuario ya está registrado
             user = _context.Usuarios.SingleOrDefault(u => u.Username == usuario.Username);
-
             if (user != null)
             {
                 return BadRequest("El Usuario ya está registrado.");
             }
-            //fecha de Hoy
 
-            var usaurioRegister = new Usuario
+            // Crear un nuevo usuario
+            var usuarioRegister = new Usuario
             {
                 Username = usuario.Username,
                 Email = usuario.Email,
                 FechaCreacion = DateTime.Now,
                 Name = usuario.Name,
                 LastName = usuario.LastName,
-                // Hashea la contraseña principal
+                // Hashear la contraseña principal
                 Password = BCrypt.Net.BCrypt.HashPassword(usuario.Password),
                 Second_Password = BCrypt.Net.BCrypt.HashPassword(usuario.SecondPassword),
-                RoleId = usuario.RoleId
+                RoleId = usuario.RoleId,
+                LugarSalidaId = usuario.LugarSalidaId
             };
 
-            // Guarda en la base de datos
-            _context.Usuarios.Add(usaurioRegister);
+            // Guardar el nuevo usuario en la base de datos
+            _context.Usuarios.Add(usuarioRegister);
             _context.SaveChanges();
 
             return Ok("Usuario registrado con éxito.");
-
         }
 
     }
@@ -153,4 +128,6 @@ public class RegistroRequest
     public required string Email { get; set; }
     // public DateTime FechaCreacion { get; set; } // Puedes usar esta propiedad si es necesario
     public required int RoleId { get; set; }
+
+    public int LugarSalidaId { get; set; }
 }

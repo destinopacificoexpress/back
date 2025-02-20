@@ -32,8 +32,8 @@ namespace DestinopacificoExpres.Controllers
         public async Task<ActionResult<Usuario>> GetUsuario(int id)
         {
             var usuario = await _context.Usuarios
-                // .Include(u => u.UsuarioRoles)
-                // .ThenInclude(ur => ur.Role)
+                // .Include(u => u.roles)
+                // .ThenInclude(ur => ur.RoleId = RoleId)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
             if (usuario == null)

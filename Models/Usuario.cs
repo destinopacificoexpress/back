@@ -23,7 +23,9 @@ public class Usuario
     public DateTime FechaCreacion { get; set; }
     public required int RoleId { get; set; }
 
-// Foreign Key
+    // public Roles roles { get; set; }
 
+// Foreign Key
+    public int LugarSalidaId { get; set; }
     public ICollection<Sesion> Sesiones { get; set; }
 }

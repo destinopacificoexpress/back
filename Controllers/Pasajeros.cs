@@ -63,11 +63,19 @@ public class PasajeroController : ControllerBase
 
     // POST: api/Pasajero
     [HttpPost]
-    public ActionResult<Pasajero> CreatePasajero(Pasajero Pasajeros)
+    public async Task<ActionResult<Pasajero>> CreatePasajero(Pasajero pasajero)
     {
-        _context.Pasajeros.Add(Pasajeros);
-        _context.SaveChanges();
-        return CreatedAtAction(nameof(GetPasajero), new { id = Pasajeros.PasajeroId }, Pasajeros);
+        var existingPasajero = await _context.Pasajeros
+            .FirstOrDefaultAsync(p => p.Documento == pasajero.Documento);
+
+        if (existingPasajero != null)
+        {
+            return Ok(new { warning = true, pasajeroId = existingPasajero.PasajeroId, message = "Ya existe un pasajero con este documento" });
+        }
+
+        _context.Pasajeros.Add(pasajero);
+        await _context.SaveChangesAsync();
+        return CreatedAtAction(nameof(GetPasajero), new { id = pasajero.PasajeroId }, pasajero);
     }
 
     // PUT: api/Pasajero/{id}

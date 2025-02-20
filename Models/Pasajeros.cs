@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 
 public class Pasajero
 {
-    [Key]
     public int PasajeroId { get; set; }
     public required int TipoDocumentoId  { get; set; }
     public required string Documento { get; set; }
