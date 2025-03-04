@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DestinopacificoExpres")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cd25db0d0f2e74e326d962c1d447ab8d6383e436")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4d2b13b254b6a11a3c73386767fa43048ad5ee04")]
 [assembly: System.Reflection.AssemblyProductAttribute("DestinopacificoExpres")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DestinopacificoExpres")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

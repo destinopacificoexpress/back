@@ -29,6 +29,10 @@ namespace DestinopacificoExpres.Data
         public DbSet<Lancha> Lanchas { get; set; }
         public DbSet<Viaje> Viajes { get; set; }
 
+        public DbSet<Aprobador> Aprobadores { get; set; }
+        public DbSet<PasajerosCortecia> PasajerosCortecias { get; set; }
+        public DbSet<Cortesia> Cortesias { get; set; }
+
         public DbSet<HorarioDisponible> HorarioDisponibles { get; set; }
 
         public DbSet<TipoDocumento> TipoDocumento { get; set; }
