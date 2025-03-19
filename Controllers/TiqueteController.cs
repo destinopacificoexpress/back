@@ -149,6 +149,39 @@ namespace DestinopacificoExpres.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("infos/{lugarPartidaId}")]
+        public async Task<ActionResult<IEnumerable<InfoDestino>>> GetInfoDestinos(int lugarPartidaId)
+        {
+
+           
+            var infoDestinos = await _context.Viajes
+                .Where(d => d.LugarPartidaId == lugarPartidaId && d.FechaViaje.Date == DateTime.Today)
+                .ToListAsync();
+
+            if (infoDestinos == null || !infoDestinos.Any())
+            {
+                return NotFound();
+            }
+
+            var viajeIds = infoDestinos.Select(v => v.ViajeId).ToList();
+            var infoTiquetes = await _context.Tiquetes
+                .Where(t => viajeIds.Contains(t.ViajeId) && t.FechaAbordo.Date == DateTime.Today)
+                .ToListAsync();
+
+            var viajeInfoList = infoDestinos.Select(v => new ViajeInfo
+            {
+                HoraSalida = v.HoraSalida.ToString(),
+                CantidadPasajero = infoTiquetes.Where(t => t.ViajeId == v.ViajeId).Sum(t => t.CantidadPasajeros),
+                CupoDisponible = _context.Lanchas.FirstOrDefault(l => l.LanchaId == v.LanchaId)?.Capacidad ?? 0 - infoTiquetes.Where(t => t.ViajeId == v.ViajeId).Sum(t => t.CantidadPasajeros),
+                LimiteCupo = _context.Lanchas.FirstOrDefault(l => l.LanchaId == v.LanchaId)?.Capacidad ?? 0,
+                KlsCarga = 0
+            }).ToList();
+
+            return Ok(viajeInfoList);
+        }
+
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTiquete(int id)
         {
@@ -217,4 +250,14 @@ public class TiqueteRequest
     public int PasajeroId { get; set; } // Asegúrate de incluir el PasajeroId si es necesario
     public int ViajeId { get; set; }
     
+}
+
+
+public class ViajeInfo
+{
+    public string HoraSalida { get; set; }
+    public int CantidadPasajero { get; set; }
+    public int CupoDisponible { get; set; }
+    public int LimiteCupo { get; set; }
+    public int KlsCarga { get; set; }
 }

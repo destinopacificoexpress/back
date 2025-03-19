@@ -28,6 +28,10 @@ public class PasajerosCortecia {
 
     [ForeignKey("PasajeroId")]
     public int PasajeroId { get; set; }
+
+    [ForeignKey("TipoDocumentoId")]
+    public int TipoDocumentoId { get; set; }
+
     public DateTime FechaOtorgada { get; set; }
     // public Pasajero Pasajero { get; set; }
 }

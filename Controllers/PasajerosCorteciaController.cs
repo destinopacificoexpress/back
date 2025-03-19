@@ -41,7 +41,7 @@ namespace DestinopacificoExpres.Controllers
         {
             _context.PasajerosCortecias.Add(request);
             await _context.SaveChangesAsync();
-            return Ok(new { mensaje = "Pasajero de cortesia registrado exitosamente" });
+            return Ok(new { mensaje = "Pasajero de cortesía registrado exitosamente" });
         }
 
         [HttpPut("{PasajerosCorteciasId}")]
