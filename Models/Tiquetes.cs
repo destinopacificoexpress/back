@@ -147,8 +147,6 @@ public class Tiquete
     [Required]
     public int PasajeroId { get; set; }
     public Pasajero? Pasajeros { get; set; } // Propiedad de navegación opcional
-
-    [Required]
-    public int ViajeId { get; set; }
+    public int? ViajeId { get; set; }
     public Viaje Viajes { get; set; }
 }

@@ -40,7 +40,9 @@ namespace DestinopacificoExpres.Controllers
                     return BadRequest("PasajeroId no existe.");
                 if (tiqueteDto.FechaRetorno != null && tiqueteDto.FechaRetorno < tiqueteDto.FechaAbordo)
                     return BadRequest("FechaRetorno debe ser mayor o igual a FechaAbordo.");
-     
+
+
+
                 var tiquete = new Tiquete
                 {
                     FechaExpedicion = tiqueteDto.FechaExpedicion,
@@ -62,7 +64,7 @@ namespace DestinopacificoExpres.Controllers
                     Descripcion = tiqueteDto.Descripcion,
                     FormaPagoId = tiqueteDto.FormaPagoId,
                     PasajeroId = tiqueteDto.PasajeroId,
-                    ViajeId = tiqueteDto.ViajeId
+                    ViajeId = tiqueteDto.ViajeId == 0 ? null : tiqueteDto.ViajeId
                 };
                 _context.Tiquetes.Add(tiquete);
                 _context.SaveChanges();
@@ -164,7 +166,7 @@ namespace DestinopacificoExpres.Controllers
 
             var viajeIds = infoDestinos.Select(v => v.ViajeId).ToList();
             var infoTiquetes = await _context.Tiquetes
-            .Where(t => viajeIds.Contains(t.ViajeId) && t.FechaAbordo.Date == DateTime.Today)
+            .Where(t => t.ViajeId.HasValue && viajeIds.Contains(t.ViajeId.Value) && t.FechaAbordo.Date == DateTime.Today)
             .ToListAsync();
 
             var viajeInfoList = infoDestinos.Select(v => new ViajeInfo
@@ -200,6 +202,40 @@ namespace DestinopacificoExpres.Controllers
             return _context.Tiquetes.Any(e => e.TiqueteId == id);
         }
 
+        [HttpGet("tiquetesAbordes/{lugarPartidaId}")]
+        public async Task<ActionResult> GetTiquetesAbordes(int lugarPartidaId)
+        {
+            var tiquetes = await _context.Tiquetes
+                .Where(t => t.GrupoId == lugarPartidaId && t.FechaAbordo.Date == DateTime.Today)
+                .ToListAsync();
+
+            var totalVentas = await _context.Tiquetes
+                .Where(t => t.GrupoId == lugarPartidaId && t.FechaExpedicion.Date == DateTime.Today)
+                .ToListAsync();
+
+            var tiqueteRetorno = await _context.Tiquetes
+                .Where(t => t.GrupoId != lugarPartidaId && t.FechaAbordo.Date == DateTime.Today)
+                .ToListAsync();
+
+                 var totalVentasRetorno = await _context.Tiquetes
+                .Where(t => t.GrupoId != lugarPartidaId && t.FechaExpedicion.Date == DateTime.Today)
+                .ToListAsync();
+
+            if (tiquetes == null || !tiquetes.Any())
+            {
+                return Ok(new { Message = "No se encontraron tiquetes para el lugar de partida y fecha especificados." });
+            }
+
+            var infoDestinos = new
+            {
+                totaltiqutes = tiquetes.Count,
+                totaltiqutesRetorno = tiqueteRetorno.Count,
+                totalVentas = totalVentas.Count,
+                totalVentasRetorno = totalVentasRetorno.Count,
+            };
+
+            return Ok(infoDestinos);
+        }
     //     [HttpGet("{tiqueteId}/qr")]
     // public async Task<IActionResult> GenerarQRCode(int tiqueteId)
     // {
