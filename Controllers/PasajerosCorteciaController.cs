@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 namespace DestinopacificoExpres.Controllers
 {
     [Route("api/[controller]")]
-    public class PasajerosCorteciaController : Controller
+    public class PasajerosCorteciaController : ControllerBase
     {
         private readonly DatabaseContext _context;
 

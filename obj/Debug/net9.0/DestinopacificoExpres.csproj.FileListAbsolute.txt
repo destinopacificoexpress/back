@@ -157,3 +157,9 @@ D:\DestinopacificoExpres\obj\Debug\net9.0\refint\DestinopacificoExpres.dll
 D:\DestinopacificoExpres\obj\Debug\net9.0\DestinopacificoExpres.pdb
 D:\DestinopacificoExpres\obj\Debug\net9.0\DestinopacificoExpres.genruntimeconfig.cache
 D:\DestinopacificoExpres\obj\Debug\net9.0\ref\DestinopacificoExpres.dll
+D:\DestinoPacificoExpres\bin\Debug\net9.0\publicado\web.config
+D:\DestinoPacificoExpres\bin\Debug\net9.0\publicado\appsettings.Development.json
+D:\DestinoPacificoExpres\bin\Debug\net9.0\publicado\appsettings.json
+D:\DestinoPacificoExpres\bin\Debug\net9.0\publicado\DestinopacificoExpres.deps.json
+D:\DestinoPacificoExpres\bin\Debug\net9.0\publicado\DestinopacificoExpres.runtimeconfig.json
+D:\DestinoPacificoExpres\bin\Debug\net9.0\publicado\DestinopacificoExpres.staticwebassets.endpoints.json

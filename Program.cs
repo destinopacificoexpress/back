@@ -12,11 +12,22 @@ builder.Services.AddScoped<TokenService>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("PermitirTodo", policy =>
+    options.AddPolicy("PermitirAngular", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins("https://sistema.destinopacificoexpress.com/")
+              .AllowAnyOrigin()
               .AllowAnyMethod()
               .AllowAnyHeader();
+    });
+});
+
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(5000); // Habilita HTTP en el puerto 5000
+    options.ListenAnyIP(5001, listenOptions =>
+    {
+        listenOptions.UseHttps(); // Habilita HTTPS en el puerto 5001
     });
 });
 
@@ -26,9 +37,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors("PermitirTodo");
-// app.UseHttpsRedirection();
-// app.UseAuthorization();
+app.UseCors("PermitirAngular");
+app.UseHttpsRedirection();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
