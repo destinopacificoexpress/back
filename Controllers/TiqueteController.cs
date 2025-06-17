@@ -1,16 +1,18 @@
+using DestinopacificoExpres.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DestinopacificoExpres.Data;
+using System.ComponentModel.DataAnnotations;
+using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
-using System.Data.SqlClient;
-using System.ComponentModel.DataAnnotations;
 
 
 namespace DestinopacificoExpres.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class TiquetesController : ControllerBase
     {
         private readonly DatabaseContext _context;
@@ -70,7 +72,7 @@ namespace DestinopacificoExpres.Controllers
                 _context.SaveChanges();
                 return CreatedAtAction(nameof(CrearTiquete), new { id = tiquete.TiqueteId }, tiquete);
             }
-            catch (DbUpdateException  ex)
+            catch (DbUpdateException ex)
             {
                 Console.WriteLine($"Error: {ex.InnerException?.Message}");
                 throw;
@@ -92,35 +94,46 @@ namespace DestinopacificoExpres.Controllers
 
         // GET: api/tiquetes
         [HttpGet]
-        public  ActionResult<IEnumerable<Tiquete>> GetTiquetes()
+        public async Task<ActionResult<IEnumerable<object>>> GetTiquetes()
         {
+            try
+            {
+                var tiquetes = await _context.Tiquetes
+                    .Select(T => new
+                    {
+                        T.TiqueteId,
+                        T.FechaExpedicion,
+                        T.NumeroTiquete,
+                        T.TipoTiqueteId,
+                        T.AgenciaId,
+                        T.GrupoId,
+                        T.InfoDestinoId,
+                        T.FechaAbordo,
+                        T.HoraAbordo,
+                        T.FechaRetorno,
+                        T.HoraRetorno,
+                        T.SoloIda,
+                        T.CantidadPasajeros,
+                        T.ValorSugerido,
+                        T.ValorIndividual,
+                        T.ExcesoEquipaje,
+                        T.TotalVenta,
+                        T.Descripcion,
+                        T.FormaPagoId,
+                        T.PasajeroId,
+                        T.ViajeId
+                    })
+                    .ToListAsync();
 
-                var tiquetes =  _context.Tiquetes.Select(T => new
-                {
-                    TiqueteId = T.TiqueteId,
-                    FechaExpedicion = T.FechaExpedicion,
-                    NumeroTiquete = T.NumeroTiquete,
-                    TipoTiqueteId = T.TipoTiqueteId,
-                    AgenciaId = T.AgenciaId,
-                    GrupoId = T.GrupoId,
-                    InfoDestinoId = T.InfoDestinoId,
-                    FechaAbordo = T.FechaAbordo,
-                    HoraAbordo = T.HoraAbordo,
-                    FechaRetorno = T.FechaRetorno,
-                    HoraRetorno = T.HoraRetorno,
-                    SoloIda = T.SoloIda,
-                    CantidadPasajeros = T.CantidadPasajeros,
-                    ValorSugerido = T.ValorSugerido,
-                    ValorIndividual = T.ValorIndividual,
-                    ExcesoEquipaje = T.ExcesoEquipaje,
-                    TotalVenta = T.TotalVenta,
-                    Descripcion = T.Descripcion,
-                    FormaPagoId = T.FormaPagoId,
-                    PasajeroId = T.PasajeroId,
-                    ViajeId = T.ViajeId
-                })
-                .ToList();
-            return Ok(tiquetes);
+                if (tiquetes == null || tiquetes.Count == 0)
+                    return NotFound("No se encontraron tiquetes.");
+
+                return Ok(tiquetes);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
@@ -171,11 +184,11 @@ namespace DestinopacificoExpres.Controllers
 
             var viajeInfoList = infoDestinos.Select(v => new ViajeInfo
             {
-            HoraSalida = v.HoraSalida.ToString(),
-            CantidadPasajero = infoTiquetes.Where(t => t.ViajeId == v.ViajeId).Sum(t => t.CantidadPasajeros),
-            CupoDisponible = _context.Lanchas.FirstOrDefault(l => l.LanchaId == v.LanchaId)?.Capacidad ?? 0 - infoTiquetes.Where(t => t.ViajeId == v.ViajeId).Sum(t => t.CantidadPasajeros),
-            LimiteCupo = _context.Lanchas.FirstOrDefault(l => l.LanchaId == v.LanchaId)?.Capacidad ?? 0,
-            KlsCarga = 0
+                HoraSalida = v.HoraSalida.ToString(),
+                CantidadPasajero = infoTiquetes.Where(t => t.ViajeId == v.ViajeId).Sum(t => t.CantidadPasajeros),
+                CupoDisponible = _context.Lanchas.FirstOrDefault(l => l.LanchaId == v.LanchaId)?.Capacidad ?? 0 - infoTiquetes.Where(t => t.ViajeId == v.ViajeId).Sum(t => t.CantidadPasajeros),
+                LimiteCupo = _context.Lanchas.FirstOrDefault(l => l.LanchaId == v.LanchaId)?.Capacidad ?? 0,
+                KlsCarga = 0
             }).ToList();
 
             return Ok(viajeInfoList);
@@ -217,9 +230,9 @@ namespace DestinopacificoExpres.Controllers
                 .Where(t => t.GrupoId != lugarPartidaId && t.FechaAbordo.Date == DateTime.Today)
                 .ToListAsync();
 
-                 var totalVentasRetorno = await _context.Tiquetes
-                .Where(t => t.GrupoId != lugarPartidaId && t.FechaExpedicion.Date == DateTime.Today)
-                .ToListAsync();
+            var totalVentasRetorno = await _context.Tiquetes
+           .Where(t => t.GrupoId != lugarPartidaId && t.FechaExpedicion.Date == DateTime.Today)
+           .ToListAsync();
 
             if (tiquetes == null || !tiquetes.Any())
             {
@@ -236,26 +249,67 @@ namespace DestinopacificoExpres.Controllers
 
             return Ok(infoDestinos);
         }
-    //     [HttpGet("{tiqueteId}/qr")]
-    // public async Task<IActionResult> GenerarQRCode(int tiqueteId)
-    // {
-    //     // Obtener datos del tiquete desde la base de datos
-    //     var tiquete = await _context.Tiquetes
-    //         .Include(t => t.InfoDestinoId)
-    //         .FirstOrDefaultAsync(t => t.TiqueteId == tiqueteId);
 
-    //     if (tiquete == null)
-    //         return NotFound("Tiquete no encontrado.");
+        [HttpGet("numeroTiquete/{iduser}")]
+        public async Task<ActionResult<int>> GetNumeroTiquetes(int iduser)
+        {
+            try
+            {
+                var user = await _context.Usuarios
+                    .Where(u => u.Id == iduser)
+                    .Select(u => new { u.LugarSalidaId })
+                    .FirstOrDefaultAsync();
 
-    //     // Crear contenido del QR (puedes personalizarlo)
-    //     var contenidoQR = $"Tiquete: {tiquete.NumeroTiquete}\n" + $"Destino: {tiquete.InfoDestinos.Nombre}\n" + $"Fecha: {tiquete.FechaAbordo:yyyy-MM-dd HH:mm}\n" + $"Valor: {tiquete.TotalVenta:C}";
+                if (user == null)
+                    return NotFound("Usuario no encontrado.");
 
-    //     // Generar QR
-    //     var qrCode = QRService.GenerarQRCode(contenidoQR);
+                int lugarPartidaId = user?.LugarSalidaId ?? 0;
 
-    //     // Retornar QR como imagen PNG
-    //     return File(qrCode, "image/png");
-    // }
+                if (lugarPartidaId <= 0)
+                    return BadRequest("El usuario no tiene un lugar de salida válido.");
+
+                var ultimoTiqueteStr = await _context.Tiquetes
+                    .Where(d => d.GrupoId == lugarPartidaId)
+                    .OrderByDescending(t => t.FechaExpedicion)
+                    .Select(t => t.NumeroTiquete)
+                    .FirstOrDefaultAsync();
+
+                int numero = 1;
+                if (!string.IsNullOrEmpty(ultimoTiqueteStr) && int.TryParse(ultimoTiqueteStr, out int ultimo))
+                {
+                    numero = ultimo + 1;
+                }
+
+                return Ok(numero);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno: {ex.Message}");
+            }
+        }
+
+
+
+        //     [HttpGet("{tiqueteId}/qr")]
+        // public async Task<IActionResult> GenerarQRCode(int tiqueteId)
+        // {
+        //     // Obtener datos del tiquete desde la base de datos
+        //     var tiquete = await _context.Tiquetes
+        //         .Include(t => t.InfoDestinoId)
+        //         .FirstOrDefaultAsync(t => t.TiqueteId == tiqueteId);
+
+        //     if (tiquete == null)
+        //         return NotFound("Tiquete no encontrado.");
+
+        //     // Crear contenido del QR (puedes personalizarlo)
+        //     var contenidoQR = $"Tiquete: {tiquete.NumeroTiquete}\n" + $"Destino: {tiquete.InfoDestinos.Nombre}\n" + $"Fecha: {tiquete.FechaAbordo:yyyy-MM-dd HH:mm}\n" + $"Valor: {tiquete.TotalVenta:C}";
+
+        //     // Generar QR
+        //     var qrCode = QRService.GenerarQRCode(contenidoQR);
+
+        //     // Retornar QR como imagen PNG
+        //     return File(qrCode, "image/png");
+        // }
     }
 }
 
@@ -269,10 +323,10 @@ public class TiqueteRequest
     public int GrupoId { get; set; }
     public int InfoDestinoId { get; set; }
     public DateTime FechaAbordo { get; set; }
-    public string HoraAbordo{ get; set; }
+    public string HoraAbordo { get; set; }
     public DateTime? FechaRetorno { get; set; }
-    
-    public string HoraRetorno{ get; set; }
+
+    public string HoraRetorno { get; set; }
     public bool SoloIda { get; set; }
     public int CantidadPasajeros { get; set; }
     public decimal ValorSugerido { get; set; }
@@ -283,7 +337,7 @@ public class TiqueteRequest
     public int FormaPagoId { get; set; }
     public int PasajeroId { get; set; } // Asegúrate de incluir el PasajeroId si es necesario
     public int ViajeId { get; set; }
-    
+
 }
 
 

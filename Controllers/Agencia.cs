@@ -1,16 +1,21 @@
+using DestinopacificoExpres.Data;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using DestinopacificoExpres.Data;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+
 namespace DestinopacificoExpres.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class AgenciaController : ControllerBase
     {
         private readonly DatabaseContext _context;
@@ -95,6 +100,13 @@ namespace DestinopacificoExpres.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [HttpGet("existe-nit/{nit}")]
+        public async Task<ActionResult<bool>> ExisteNit(string nit)
+        {
+            var existe = await _context.Agencias.AnyAsync(a => a.Nit == nit);
+            return Ok(existe);
         }
     }
 }

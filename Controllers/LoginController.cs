@@ -1,14 +1,16 @@
 
+using DestinopacificoExpres.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DestinopacificoExpres.Data;
+using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
-using System.Data.SqlClient;
 namespace DestinopacificoExpres.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [AllowAnonymous]
     public class LoginController : ControllerBase
     {
         private readonly DatabaseContext _context;
